@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: student-frontend:latest
+        image: bharathiraja3234/student-frontend
         imagePullPolicy: Always
         ports:
         - containerPort: 80
