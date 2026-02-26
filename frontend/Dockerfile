@@ -3,10 +3,14 @@ FROM node:18-alpine AS build
 
 WORKDIR /app
 
-# Copy package files first (better layer caching)
+# Copy package files
 COPY package*.json ./
 
-# Install ALL dependencies including dev dependencies
+# Remove old lock file and generate new one
+RUN rm -f package-lock.json && \
+    npm install --package-lock-only
+
+# Install dependencies (use install instead of ci to avoid sync issues)
 RUN npm install --include=dev
 
 # Copy source code
@@ -18,10 +22,10 @@ RUN npm run build
 # Production stage
 FROM nginx:alpine
 
-# Copy built assets from build stage
+# Copy built assets
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Copy nginx configuration
+# Copy nginx config if exists
 COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 3000
