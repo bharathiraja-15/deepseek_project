@@ -6,7 +6,8 @@
     "react-dom": "^18.2.0",
     "axios": "^1.4.0",
     "react-router-dom": "^6.11.2",
-    "bootstrap": "^5.2.3"
+    "bootstrap": "^5.2.3",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
