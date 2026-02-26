@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
 
@@ -40,7 +41,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       const response = await axios.post(`${API_URL}/students`, formData);
       setStudents([response.data, ...students]);
@@ -62,7 +63,7 @@ function App() {
 
   const handleDelete = async (studentId) => {
     if (!window.confirm('Are you sure you want to delete this student?')) return;
-    
+
     try {
       await axios.delete(`${API_URL}/students/${studentId}`);
       setStudents(students.filter(s => s.student_id !== studentId));
@@ -78,81 +79,81 @@ function App() {
   };
 
   return (
-    <div className="container mt-4">
-      <h1 className="mb-4">Student Data Management System</h1>
-      
-      {message.text && (
-        <div className={`alert alert-${message.type === 'success' ? 'success' : 'danger'}`}>
-          {message.text}
-        </div>
-      )}
+    <div className="main-bg">
+      <div className="container py-5">
 
-      <div className="row">
-        <div className="col-md-5">
-          <div className="card">
-            <div className="card-header">
-              <h3>Register New Student</h3>
+        <h1 className="dashboard-title">🎓 Student Management Dashboard</h1>
+
+        {/* Stats Cards */}
+        <div className="row mb-4">
+          <div className="col-md-4">
+            <div className="stats-card">
+              <h4>Total Students</h4>
+              <h2>{students.length}</h2>
             </div>
-            <div className="card-body">
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label className="form-label">Student ID</label>
-                  <input
-                    type="text"
-                    className="form-control"
+          </div>
+          <div className="col-md-4">
+            <div className="stats-card">
+              <h4>Departments</h4>
+              <h2>5</h2>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="stats-card">
+              <h4>Enrollment Year</h4>
+              <h2>2024</h2>
+            </div>
+          </div>
+        </div>
+
+        {message.text && (
+          <div className={`alert alert-${message.type === 'success' ? 'success' : 'danger'}`}>
+            {message.text}
+          </div>
+        )}
+
+        <div className="row">
+          {/* Form Section */}
+          <div className="col-md-5">
+            <div className="card custom-card">
+              <div className="card-header custom-header">
+                Register New Student
+              </div>
+              <div className="card-body">
+                <form onSubmit={handleSubmit}>
+                  <input type="text" className="form-control mb-3"
+                    placeholder="Student ID"
                     name="student_id"
                     value={formData.student_id}
                     onChange={handleChange}
-                    required
-                  />
-                </div>
-                
-                <div className="mb-3">
-                  <label className="form-label">Full Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
+                    required />
+
+                  <input type="text" className="form-control mb-3"
+                    placeholder="Full Name"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    required
-                  />
-                </div>
-                
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input
-                    type="email"
-                    className="form-control"
+                    required />
+
+                  <input type="email" className="form-control mb-3"
+                    placeholder="Email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    required
-                  />
-                </div>
-                
-                <div className="mb-3">
-                  <label className="form-label">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
+                    required />
+
+                  <input type="password" className="form-control mb-3"
+                    placeholder="Password"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    required
-                    minLength="6"
-                  />
-                </div>
-                
-                <div className="mb-3">
-                  <label className="form-label">Department</label>
-                  <select
-                    className="form-control"
+                    required />
+
+                  <select className="form-control mb-3"
                     name="department"
                     value={formData.department}
                     onChange={handleChange}
-                    required
-                  >
+                    required>
                     <option value="">Select Department</option>
                     <option value="Computer Science">Computer Science</option>
                     <option value="Engineering">Engineering</option>
@@ -160,42 +161,30 @@ function App() {
                     <option value="Physics">Physics</option>
                     <option value="Chemistry">Chemistry</option>
                   </select>
-                </div>
-                
-                <div className="mb-3">
-                  <label className="form-label">Enrollment Year</label>
-                  <input
-                    type="number"
-                    className="form-control"
+
+                  <input type="number" className="form-control mb-3"
+                    placeholder="Enrollment Year"
                     name="enrollment_year"
                     value={formData.enrollment_year}
                     onChange={handleChange}
-                    min="2000"
-                    max="2024"
-                    required
-                  />
-                </div>
-                
-                <button 
-                  type="submit" 
-                  className="btn btn-primary"
-                  disabled={loading}
-                >
-                  {loading ? 'Registering...' : 'Register Student'}
-                </button>
-              </form>
+                    required />
+
+                  <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                    {loading ? 'Registering...' : 'Register Student'}
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div className="col-md-7">
-          <div className="card">
-            <div className="card-header">
-              <h3>Student List</h3>
-            </div>
-            <div className="card-body">
-              <div className="table-responsive">
-                <table className="table table-striped">
+
+          {/* Table Section */}
+          <div className="col-md-7">
+            <div className="card custom-card">
+              <div className="card-header custom-header">
+                Student List
+              </div>
+              <div className="card-body table-responsive">
+                <table className="table table-hover">
                   <thead>
                     <tr>
                       <th>ID</th>
@@ -203,7 +192,7 @@ function App() {
                       <th>Email</th>
                       <th>Department</th>
                       <th>Year</th>
-                      <th>Actions</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -215,10 +204,9 @@ function App() {
                         <td>{student.department}</td>
                         <td>{student.enrollment_year}</td>
                         <td>
-                          <button 
+                          <button
                             className="btn btn-sm btn-danger"
-                            onClick={() => handleDelete(student.student_id)}
-                          >
+                            onClick={() => handleDelete(student.student_id)}>
                             Delete
                           </button>
                         </td>
@@ -226,9 +214,14 @@ function App() {
                     ))}
                   </tbody>
                 </table>
+
+                {students.length === 0 && (
+                  <p className="text-center mt-3">No students registered yet.</p>
+                )}
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
